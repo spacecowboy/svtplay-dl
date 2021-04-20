@@ -1,6 +1,5 @@
 import html
 import re
-import unicodedata
 
 
 def ensure_unicode(s):
@@ -37,8 +36,6 @@ def filenamify(title):
     # ensure it is unicode
     title = ensure_unicode(title)
 
-    # Convert to lowercase
-    # Drop any non ascii letters/digits
     # Drop any leading/trailing whitespace that may have appeared
     title = title.strip()
 

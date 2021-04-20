@@ -243,11 +243,11 @@ class Svtplay(Service, MetadataThumbMixin):
         season_nr = self._find_season(data)
         episode_nr = self._find_episode(data)
 
-        if season_nr is None or episode_nr is None:
-            return season, episode
+        if season_nr is not None:
+            season = "{:02d}".format(int(season_nr))
 
-        season = "{:02d}".format(int(season_nr))
-        episode = "{:02d}".format(int(episode_nr))
+        if episode_nr is not None:
+            episode = "{:02d}".format(int(episode_nr))
 
         return season, episode
 

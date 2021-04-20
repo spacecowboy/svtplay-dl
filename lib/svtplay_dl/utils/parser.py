@@ -312,7 +312,7 @@ def setup_defaults():
     options.set("proxy", None)
     options.set("include_clips", False)
     options.set("cmoreoperatorlist", False)
-    options.set("filename", "{title}.s{season}e{episode}.{episodename}-{id}-{service}.{ext}")
+    options.set("filename", "{title} - S{season}E{episode} - {episodename}.{ext}")
     options.set("only_audio", False)
     options.set("only_video", False)
     return _special_settings(options)

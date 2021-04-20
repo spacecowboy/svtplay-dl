@@ -135,12 +135,9 @@ def formatname(output, config, extension="mp4"):
             tvshow = output.get("season", None) is not None and output.get("episode", None) is not None
         else:
             tvshow = output.get("tvshow", False)
-        if config.get("subfolder") and "title" in output and tvshow:
+        if config.get("subfolder") and "title" in output:
             # Add subfolder with name title
             name = os.path.join(output["title"], name)
-        elif config.get("subfolder") and not tvshow:
-            # Add subfolder with name movies
-            name = os.path.join("movies", name)
     if config.get("output") and os.path.isdir(os.path.expanduser(config.get("output"))):
         name = os.path.join(config.get("output"), name)
     elif config.get("path") and os.path.isdir(os.path.expanduser(config.get("path"))):
@@ -154,6 +151,15 @@ def formatname(output, config, extension="mp4"):
 def _formatname(output, config, extension):
     output["ext"] = extension
     name = config.get("filename")
+
+    # If season is found but not episode
+    if output.get("season", "") and not output.get("episode", ""):
+        output["episode"] = "0"
+
+    # If episode is found but not season
+    if output.get("episode", "") and not output.get("season", ""):
+        output["season"] = "0"
+
     for key in output:
         if key == "title" and output[key]:
             name = name.replace("{title}", filenamify(output[key]))
@@ -174,10 +180,10 @@ def _formatname(output, config, extension):
 
     # Remove all {text} we cant replace with something
     for item in re.findall(r"([\.\-]?(([^\.\-]+\w+)?\{[\w\-]+\}))", name):
-        if "season" in output and output["season"] and re.search(r"(e\{[\w\-]+\})", name):
-            name = name.replace(re.search(r"(e\{[\w\-]+\})", name).group(1), "")
-        else:
-            name = name.replace(item[0], "")
+        name = name.replace(item[0], "")
+
+    # And remove possible duplicate spaces due to missing fields
+    name = re.sub(r"\s+", " ", name)
 
     return name
 
