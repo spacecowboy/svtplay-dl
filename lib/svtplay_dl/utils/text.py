@@ -37,18 +37,13 @@ def filenamify(title):
     # ensure it is unicode
     title = ensure_unicode(title)
 
-    # NFD decomposes chars into base char and diacritical mark, which
-    # means that we will get base char when we strip out non-ascii.
-    title = unicodedata.normalize("NFD", title)
-
     # Convert to lowercase
     # Drop any non ascii letters/digits
     # Drop any leading/trailing whitespace that may have appeared
-    title = re.sub(r"[^a-z0-9 .-]", "", title.lower().strip())
+    title = title.strip()
 
-    # Replace whitespace with dot
-    title = re.sub(r"\s+", ".", title)
-    title = re.sub(r"\.-\.", "-", title)
+    # Replace multiple whitespace with single space
+    title = re.sub(r"\s+", " ", title)
 
     return title
 
